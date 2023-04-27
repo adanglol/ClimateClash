@@ -2,11 +2,12 @@
 console.log('Hello World');
 
 // Configuring our game object
-var config = {
-    type: Phaser.AUTO,
+let config = {
+    type: Phaser.WEBGL,
     width: 800,
     height: 600,
     parent: 'game-container',
+    backgroundColor: '#000000',
     scene: {
         preload: preload,
         create: create,
@@ -14,7 +15,7 @@ var config = {
     }
 }
 
-var game = new Phaser.Game(config);
+let game = new Phaser.Game(config);
 
 // Preload function
 function preload() {
@@ -24,6 +25,7 @@ function preload() {
 // Create function
 function create() {
     console.log('Create');
+    var rect = this.add.rectangle(300, 300, 100, 100, 0xff0000);
 }
 
 // Update function runs continuously
@@ -34,3 +36,4 @@ function update() {
         updateCalled = true;
     }
 }
+
