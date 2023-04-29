@@ -1,4 +1,5 @@
 // Scene 1 - displays "Scene 1" text for 3 seconds, then switches to Scene 2
+
 class Scene1 extends Phaser.Scene {
     constructor() {
         super('Scene1');
@@ -42,9 +43,16 @@ class Scene1 extends Phaser.Scene {
                         const bg = this.add.rectangle(centerX, centerY, this.game.config.width, this.game.config.height, 0xFF0000, 0.5).setOrigin(0.5);
                         const text = this.add.text(centerX, centerY + 100, 'Click to start!', { fontFamily: 'Sigmar', fontSize: 72, color: '#ffffff' }).setOrigin(0.5);
                         text.setInteractive();
-                        text.on('pointerup', () => {
+                        text
+                        .on('pointerup', () => {
                             music.stop();
                             this.scene.start('Scene2');
+                        })
+                        .on('pointerover', () => {
+                            text.setColor('#000000');
+                        })
+                        .on('pointerout', () => {
+                            text.setColor('#ffffff');
                         });
                         
                         const music = this.sound.add('bgm');
@@ -95,7 +103,18 @@ class Scene2 extends Phaser.Scene {
         this.tweens.add({
             targets: background,
             scale : 5,
-            duration: 800,
+            duration: 1000,
+            yoyo : true,
+            onComplete: () => {
+                console.log('complete');
+            }
+        })
+
+        this.tweens.add({
+            targets: background,
+            y: centerY - 50,
+            ease: 'Sine.easeInOut',
+            duration: 8000,
             yoyo : true,
             onComplete: () => {
                 console.log('complete');
@@ -105,9 +124,37 @@ class Scene2 extends Phaser.Scene {
 
 
 
-        const gameDialouge = this.add.text(centerX + 270, centerY, 'In a world where we all in some form rely on AI for our Daily Lives...', {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.7}}).setOrigin(0.5);
 
-        const continueText = this.add.text(centerX + 260, centerY + 200, 'Next ->', {
+        const gameDialouge = this.add.text(centerX + 270, centerY, '', {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.7}}).setOrigin(0.5);
+
+        // set up animation for gameDialouge
+        // how can i make this text appear letter by letter?
+
+        const textToType ='In a world where we all in some form rely on AI for our Daily lives...'
+        gameDialouge.setVisible(false);
+        let index = 0;
+        this.time.addEvent({
+            delay: 80,
+            repeat: textToType.length - 1,
+            callback: () => {
+                gameDialouge.text += textToType[index];
+                index++;
+            }
+        })
+        this.tweens.add({
+            targets: gameDialouge,
+            alpha: 1,
+            duration: 1000,
+            ease: 'Power2',
+            delay : 1000,
+            onComplete: () => {
+                console.log('complete');
+                gameDialouge.setVisible(true);
+            }
+        })
+
+
+        const continueText = this.add.text(centerX + 280, centerY + 200, 'Next ->', {
             fontFamily: 'Sigmar',
             fontSize: 30,
             color: '#ffffff',
@@ -115,12 +162,61 @@ class Scene2 extends Phaser.Scene {
             align: 'right',
             wordWrap: {width: centerX * 0.7}
         }).setOrigin(0.5);
-    
+
+
+        continueText.alpha = 0;
+        this.tweens.add({
+            targets: continueText,
+            alpha: 1,
+            duration: 3000,
+            ease: 'Power2',
+            delay: 3000,
+            onComplete: () => {
+                console.log('complete');
+            }
+        })
+
+        // hovertext
+        // continueText.setInteractive({useHandCursor: true})
+        // .on('pointerover', () => {
+        //     this.tweens.add({
+        //         targets: continueText,
+        //     continueText.setColor('#ff0000');
+        // })
+        // .on('pointerout', () => {
+        //     continueText.setColor('#ffffff');
+        // });
+        const moveDistance = 30; // adjust this value to change the distance the text moves
+        const originalX = continueText.x;
+
+        continueText.setInteractive({ useHandCursor: true })
+        .on('pointerover', () => {
+            continueText.setColor('#ff0000');
+            this.tweens.add({
+            targets: continueText,
+            x: originalX + moveDistance,
+            duration: 500,
+            ease: 'Power2'
+            });
+        })
+        .on('pointerout', () => {
+            continueText.setColor('#ffffff');
+            this.tweens.add({
+            targets: continueText,
+            x: originalX,
+            duration: 500,
+            ease: 'Power2'
+            });
+        });
+
+
         // set up click event for continueText
         continueText.setInteractive({useHandCursor: true}).on('pointerdown', () => {
-            music.stop();
+            // music.stop();
             this.scene.start('Scene3');
         });
+
+
 
     
         
@@ -137,25 +233,48 @@ class Scene3 extends Phaser.Scene {
         // preload assets
         this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
         // images
-        this.load.image('background', 'lib/Assets/Weld.jpg');
+        this.load.image('weld', 'lib/Assets/Weld.jpg');
 
     }
-    create() {
-        
+    create() {        
         const centerX = this.game.config.width / 2;
         const centerY = this.game.config.height / 2;
-        const background = this.add.image(centerX +130,centerY,'background');
+        const background = this.add.image(centerX +130,centerY,'weld');
        
         background.setScale(.25);
-        background.setDisplaySize(centerX + 150, centerY + 100); // set the image to fit half the game container
+        background.setDisplaySize(centerX + 260, centerY + 100); // set the image to fit half the game container
         
-       
-        this.add.text(centerX -400,centerY-100, 'JELLO', {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.7}});
+        // animation for our weld image
+        this.tweens.add({
+            targets: background,
+            scale : 5,
+            duration: 1000,
+            yoyo : true,
+            onComplete: () => {
+                console.log('complete');
+            }
+        })
+        const textToType ='As an AI engineer it is your mission to maintain AI and Machines to ensure effencieny and world sustainability';
+
+        const roleText = this.add.text(centerX -400,centerY-200, textToType, {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.5}});
         // const gameDialouge = this.add.text(centerX + 270, centerY, 'In a world where we all in some form rely on AI for our Daily Lives...', {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.7}}).setOrigin(0.5);
 
-        // this.time.delayedCall(3000, () => {
-        //     this.scene.start('Game');
-        // });
+
+        // set up animation for roleText
+        roleText.alpha = 0;
+        this.tweens.add({
+            targets: roleText,
+            alpha: 1,
+            duration: 1000,
+            ease: 'Power2',
+            delay : 1000,
+            onComplete: () => {
+                console.log('complete');            }
+        })
+        this.time.delayedCall(10000, () => {
+            this.scene.start('Game');
+        });
+    
     }
 }
 
@@ -168,6 +287,7 @@ class GameScene extends Phaser.Scene {
         // preload assets
     }
     create() {
+        this.sound.stopAll();
         this.add.text(300, 250, 'Game', { fill: '#ffffff' });
     }
 }
@@ -179,7 +299,7 @@ const config = {
     height: 600,
     parent: 'game-container',
     backgroundColor: '#000000',
-    scene: [Scene3, Scene2, Scene1, GameScene]
+    scene: [Scene1, Scene2, Scene3, GameScene],
     
 };
 
