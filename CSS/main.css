@@ -1,7 +1,15 @@
+body {
+    background: black !important;
+}
+
+* {
+    font-family: 'Darumadrop One', cursive;
+    color: white;
+}
 
 #game-container {
-    background: #371212;
-    padding: 20px;
+    background: #7c2020;
+    padding: 10px;
     text-align: center;
     display: flex;
 }
@@ -9,7 +17,7 @@
 
 .box {
     background: #371212;
-    color: #000;
+    color: white;
     padding: 10px;
     text-align: center;
 }
