@@ -87,11 +87,27 @@ class Scene2 extends Phaser.Scene {
         const centerX = this.game.config.width / 2;
         const centerY = this.game.config.height / 2;
         const background = this.add.image(centerX - 155,centerY,'background');
+       
         background.setScale(.25);
         background.setDisplaySize(centerX + 150, centerY + 100); // set the image to fit half the game container
-        const text = this.add.text(centerX + 260, centerY, 'In a world where we all in some form rely on AI for our Daily Lives...', {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.7}}).setOrigin(0.5);
 
-        const continueText = this.add.text(centerX + 260, centerY + 200, 'Next', {
+        // animation
+        this.tweens.add({
+            targets: background,
+            scale : 5,
+            duration: 800,
+            yoyo : true,
+            onComplete: () => {
+                console.log('complete');
+            }
+        })
+
+
+
+
+        const gameDialouge = this.add.text(centerX + 270, centerY, 'In a world where we all in some form rely on AI for our Daily Lives...', {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.7}}).setOrigin(0.5);
+
+        const continueText = this.add.text(centerX + 260, centerY + 200, 'Next ->', {
             fontFamily: 'Sigmar',
             fontSize: 30,
             color: '#ffffff',
@@ -119,12 +135,27 @@ class Scene3 extends Phaser.Scene {
     }
     preload() {
         // preload assets
+        this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
+        // images
+        this.load.image('background', 'lib/Assets/Weld.jpg');
+
     }
     create() {
-        this.add.text(300, 250, 'Scene 3', { fill: '#ffffff' });
-        this.time.delayedCall(3000, () => {
-            this.scene.start('Game');
-        });
+        
+        const centerX = this.game.config.width / 2;
+        const centerY = this.game.config.height / 2;
+        const background = this.add.image(centerX +130,centerY,'background');
+       
+        background.setScale(.25);
+        background.setDisplaySize(centerX + 150, centerY + 100); // set the image to fit half the game container
+        
+       
+        this.add.text(centerX -400,centerY-100, 'JELLO', {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.7}});
+        // const gameDialouge = this.add.text(centerX + 270, centerY, 'In a world where we all in some form rely on AI for our Daily Lives...', {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.7}}).setOrigin(0.5);
+
+        // this.time.delayedCall(3000, () => {
+        //     this.scene.start('Game');
+        // });
     }
 }
 
@@ -148,7 +179,7 @@ const config = {
     height: 600,
     parent: 'game-container',
     backgroundColor: '#000000',
-    scene: [Scene1, Scene2, Scene3, GameScene]
+    scene: [Scene3, Scene2, Scene1, GameScene]
     
 };
 
