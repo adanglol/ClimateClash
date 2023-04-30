@@ -252,31 +252,30 @@ class Scene3 extends Phaser.Scene {
             yoyo : true,
             onComplete: () => {
                 console.log('complete');
+                const textToType ='As an AI engineer it is your mission to maintain AI and Machines to ensure effencieny and world sustainability';
+                const roleText = this.add.text(centerX -400,centerY-200, textToType, {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.5}});
+                roleText.alpha = 0;
+                this.tweens.add({
+                    targets: roleText,
+                    alpha: 1,
+                    duration: 1000,
+                    ease: 'Power2',
+                    delay : 1000,
+                    onComplete: () => {
+                        console.log('complete');
+                        this.time.delayedCall(3000, () => {
+                            this.scene.start('Game');
+                        }, [], this);
+                        
+                    }
+                })
             }
-        })
-        const textToType ='As an AI engineer it is your mission to maintain AI and Machines to ensure effencieny and world sustainability';
-
-        const roleText = this.add.text(centerX -400,centerY-200, textToType, {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.5}});
-        // const gameDialouge = this.add.text(centerX + 270, centerY, 'In a world where we all in some form rely on AI for our Daily Lives...', {fontFamily: 'Sigmar', fontSize: 30, color: '#ffffff',padding : {x:10,y:5}, align : 'right' ,wordWrap : {width : centerX *.7}}).setOrigin(0.5);
-
-
-        // set up animation for roleText
-        roleText.alpha = 0;
-        this.tweens.add({
-            targets: roleText,
-            alpha: 1,
-            duration: 1000,
-            ease: 'Power2',
-            delay : 1000,
-            onComplete: () => {
-                console.log('complete');            }
-        })
-        this.time.delayedCall(10000, () => {
-            this.scene.start('Game');
-        });
-    
+        }) 
     }
 }
+
+
+
 
 // Main game scene - displays "Game" text
 class GameScene extends Phaser.Scene {
@@ -285,10 +284,75 @@ class GameScene extends Phaser.Scene {
     }
     preload() {
         // preload assets
+        this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
+        this.load.image('bg-grey','lib/Assets/sprites/Night/1.png');
+        this.load.image('bg-1','lib/Assets/sprites/Night/2.png');
+        this.load.image('bg-2','lib/Assets/sprites/Night/3.png');
+        this.load.image('bg-3','lib/Assets/sprites/Night/4.png');
+        this.load.image('bg-4','lib/Assets/sprites/Night/5.png');
+        
+
     }
     create() {
-        this.sound.stopAll();
-        this.add.text(300, 250, 'Game', { fill: '#ffffff' });
+        // this.sound.stopAll();
+
+        const centerX = this.game.config.width / 2;
+        const centerY = this.game.config.height / 2;
+
+        const bg = this.add.image(0,0,'bg-grey').setOrigin(0);
+        bg.displayWidth = this.game.canvas.width;
+        bg.displayHeight = this.game.canvas.height;
+
+
+        const bg1 = this.add.image(0,0,'bg-1').setOrigin(0);
+        bg1.displayWidth = this.game.canvas.width;
+        bg1.displayHeight = this.game.canvas.height;
+
+        this.tweens.add({
+            targets: bg1,
+            x : bg1.x + 200,
+            duration : 2000,
+        })
+
+
+        const bg2 = this.add.image(0,0,'bg-2').setOrigin(0);
+        bg2.displayWidth = this.game.canvas.width;
+        bg2.displayHeight = this.game.canvas.height;
+
+        this.tweens.add({
+            targets: bg2,
+            x : bg2.x - 300,
+            // 5000
+            duration : 5000,
+            onComplete: () => {
+                this.add.text(centerX -200, centerY -250, 'Climate Clash', { fontFamily: 'Sigmar' ,fontSize :40})
+
+            }
+        });
+           
+        
+
+        const bg3 = this.add.image(0,0,'bg-3').setOrigin(0);
+        bg3.displayWidth = this.game.canvas.width;
+        bg3.displayHeight = this.game.canvas.height;
+
+        this.tweens.add({
+            targets: bg3,
+            x : bg3.x + 30,
+            duration : 5000,
+        })
+
+        const bg4 = this.add.image(0,0,'bg-4').setOrigin(0);
+        bg4.displayWidth = this.game.canvas.width;
+        bg4.displayHeight = this.game.canvas.height;
+
+        this.tweens.add({
+            targets: bg4,
+            x : bg4.x + 200,
+            duration : 5000,
+        })
+
+
     }
 }
 
