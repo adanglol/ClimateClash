@@ -264,7 +264,7 @@ class Scene3 extends Phaser.Scene {
                     onComplete: () => {
                         console.log('complete');
                         this.time.delayedCall(3000, () => {
-                            this.scene.start('Game');
+                            this.scene.start('GameScene');
                         }, [], this);
                         
                     }
@@ -280,7 +280,7 @@ class Scene3 extends Phaser.Scene {
 // Main game scene - displays "Game" text
 class GameScene extends Phaser.Scene {
     constructor() {
-        super('Game');
+        super('GameScene');
     }
     preload() {
         // preload assets
@@ -325,7 +325,12 @@ class GameScene extends Phaser.Scene {
             // 5000
             duration : 5000,
             onComplete: () => {
-                this.add.text(centerX -200, centerY -250, 'Climate Clash', { fontFamily: 'Sigmar' ,fontSize :40})
+                this.add.text(centerX -200, centerY -250, 'Climate Clash', { fontFamily: 'Sigmar' ,fontSize :50})
+                const spacing = 150;
+                const spacingX = -50;
+                this.add.text(centerX + spacingX, centerY -spacing, 'Start', { fontFamily: 'Sigmar' ,fontSize :40})
+                this.add.text(centerX + spacingX, centerY , 'Options', { fontFamily: 'Sigmar' ,fontSize :40})
+                this.add.text(centerX + spacingX, centerY +spacing, 'Credits', { fontFamily: 'Sigmar' ,fontSize :40})
 
             }
         });
@@ -363,7 +368,7 @@ const config = {
     height: 600,
     parent: 'game-container',
     backgroundColor: '#000000',
-    scene: [Scene1, Scene2, Scene3, GameScene],
+    scene: [Scene1,Scene2,Scene3,GameScene],
     
 };
 
